@@ -1,14 +1,11 @@
 import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GameStats } from '../../models/heardle.models';
-import { DialogModule } from 'primeng/dialog';
-import { ProgressBarModule } from 'primeng/progressbar';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-stats-modal',
   standalone: true,
-  imports: [CommonModule, DialogModule, ProgressBarModule, ButtonModule],
+  imports: [CommonModule],
   templateUrl: './stats-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

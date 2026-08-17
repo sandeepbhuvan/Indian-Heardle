@@ -1,15 +1,12 @@
-import { Component, input, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Language } from '../../models/heardle.models';
-import { SelectModule } from 'primeng/select';
-import { SelectButtonModule } from 'primeng/selectbutton';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, SelectButtonModule, ButtonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './navbar.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -23,14 +20,25 @@ export class NavbarComponent {
   readonly openHelp = output<void>();
   readonly openStats = output<void>();
 
-  readonly modeOptions = [
+  // Tracks mobile menu state
+  readonly isMenuOpen = signal(false);
+
+  readonly modeOptions: Array<{ label: string; value: 'daily' | 'random' }> = [
     { label: 'Daily', value: 'daily' },
     { label: 'Practice', value: 'random' }
   ];
+
+  toggleMenu() {
+    this.isMenuOpen.update(open => !open);
+  }
 
   onLanguageChange(code: string) {
     if (code) {
       this.languageChange.emit(code);
     }
+  }
+
+  emitMode(value: string) {
+    this.modeChange.emit(value as 'daily' | 'random');
   }
 }

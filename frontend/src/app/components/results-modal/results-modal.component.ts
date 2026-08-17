@@ -1,14 +1,12 @@
 import { Component, input, output, computed, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RevealResponse, GuessAttempt } from '../../models/heardle.models';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
 import confetti from 'canvas-confetti';
 
 @Component({
   selector: 'app-results-modal',
   standalone: true,
-  imports: [CommonModule, DialogModule, ButtonModule],
+  imports: [CommonModule],
   templateUrl: './results-modal.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

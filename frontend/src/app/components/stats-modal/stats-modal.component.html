@@ -1,57 +1,67 @@
-<p-dialog 
-  [visible]="true" 
-  [modal]="true" 
-  [closable]="true" 
-  (visibleChange)="!$event && onClose()"
-  [draggable]="false" 
-  [resizable]="false"
-  styleClass="w-full max-w-sm"
-  header="📊 Game Statistics">
-  
-  <div class="pt-2">
-    <!-- Metric summaries -->
-    <div class="grid grid-cols-4 gap-2 mb-6">
-      <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
-        <span class="block text-xl font-extrabold text-amber-400">{{ stats().played }}</span>
-        <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Played</span>
-      </div>
-      <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
-        <span class="block text-xl font-extrabold text-amber-400">{{ stats().winRate }}%</span>
-        <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Win %</span>
-      </div>
-      <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
-        <span class="block text-xl font-extrabold text-amber-400">{{ stats().currentStreak }}</span>
-        <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Streak</span>
-      </div>
-      <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
-        <span class="block text-xl font-extrabold text-amber-400">{{ stats().maxStreak }}</span>
-        <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Max</span>
-      </div>
+<!-- Modal Backdrop -->
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center p-4"
+  (click)="onClose()">
+  <!-- Modal Panel -->
+  <div
+    class="relative w-full max-w-sm bg-slate-900/98 border border-white/15 backdrop-blur-xl rounded-2xl shadow-2xl shadow-black/60 p-6"
+    (click)="$event.stopPropagation()">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-5">
+      <h2 class="text-lg font-extrabold text-white">📊 Game Statistics</h2>
+      <button
+        (click)="onClose()"
+        class="w-8 h-8 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
+        <i class="pi pi-times text-sm"></i>
+      </button>
     </div>
 
-    <!-- Guess Distribution Graph with PrimeNG ProgressBar -->
-    <h3 class="text-xs text-slate-300 uppercase tracking-wider font-bold mb-3">Guess Distribution</h3>
-    <div class="flex flex-col gap-2 mb-6">
-      @for (item of [1, 2, 3, 4, 5, 6]; track item) {
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-bold text-slate-400 w-3 text-right">{{ item }}</span>
-          <div class="flex-1">
-            <p-progressbar 
-              [value]="getBarWidth(item)" 
-              [showValue]="false"
-              styleClass="h-4" />
-          </div>
-          <span class="text-xs font-bold text-slate-300 w-4 text-right">
-            {{ stats().guessesDistribution[item] || 0 }}
-          </span>
+    <!-- Body -->
+    <div>
+      <!-- Metric summaries -->
+      <div class="grid grid-cols-4 gap-2 mb-6">
+        <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
+          <span class="block text-xl font-extrabold text-amber-400">{{ stats().played }}</span>
+          <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Played</span>
         </div>
-      }
-    </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
+          <span class="block text-xl font-extrabold text-amber-400">{{ stats().winRate }}%</span>
+          <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Win %</span>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
+          <span class="block text-xl font-extrabold text-amber-400">{{ stats().currentStreak }}</span>
+          <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Streak</span>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
+          <span class="block text-xl font-extrabold text-amber-400">{{ stats().maxStreak }}</span>
+          <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Max</span>
+        </div>
+      </div>
 
-    <p-button 
-      label="Close" 
-      severity="secondary" 
-      (onClick)="onClose()" 
-      styleClass="w-full text-xs font-semibold py-2.5" />
+      <!-- Guess Distribution Graph (native progress bars) -->
+      <h3 class="text-xs text-slate-300 uppercase tracking-wider font-bold mb-3">Guess Distribution</h3>
+      <div class="flex flex-col gap-2 mb-6">
+        @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-slate-400 w-3 text-right">{{ item }}</span>
+            <div class="flex-1 h-5 bg-white/6 rounded overflow-hidden">
+              <div
+                class="h-full bg-gradient-to-r from-amber-500 to-pink-500 rounded transition-all duration-500"
+                [style.width.%]="getBarWidth(item)">
+              </div>
+            </div>
+            <span class="text-xs font-bold text-slate-300 w-4 text-right">
+              {{ stats().guessesDistribution[item] || 0 }}
+            </span>
+          </div>
+        }
+      </div>
+
+      <button
+        (click)="onClose()"
+        class="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-xs font-semibold bg-white/10 hover:bg-white/15 border border-white/10 text-slate-200 cursor-pointer transition-all">
+        Close
+      </button>
+    </div>
   </div>
-</p-dialog>
+</div>

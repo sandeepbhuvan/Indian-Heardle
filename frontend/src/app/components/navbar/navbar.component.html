@@ -17,52 +17,52 @@
 
     <!-- Right Controls -->
     <div class="flex items-center gap-3 flex-wrap">
-      <!-- PrimeNG Select Dropdown for Languages -->
-      <p-select 
-        [options]="languages()" 
-        [ngModel]="selectedLanguage()" 
-        (ngModelChange)="onLanguageChange($event)"
-        optionLabel="display_name" 
-        optionValue="code"
-        placeholder="Select Language"
-        styleClass="w-40 sm:w-48 text-xs font-semibold">
-        <ng-template let-lang pTemplate="selectedItem">
-          <span class="truncate">{{ lang.display_name }}</span>
-        </ng-template>
-        <ng-template let-lang pTemplate="item">
-          <div class="flex items-center justify-between w-full gap-2">
-            <span class="text-xs">{{ lang.display_name }}</span>
-            <span class="text-[10px] text-slate-400 font-mono">{{ lang.native_name || lang.code }}</span>
-          </div>
-        </ng-template>
-      </p-select>
+      <!-- Native Select Dropdown for Languages -->
+      <div class="relative">
+        <select
+          [ngModel]="selectedLanguage()"
+          (ngModelChange)="onLanguageChange($event)"
+          class="appearance-none w-40 sm:w-48 text-xs font-semibold bg-slate-900/90 border border-white/15 text-slate-100 rounded-xl px-3 py-2 pr-8 cursor-pointer focus:outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 transition-all">
+          @for (lang of languages(); track lang.code) {
+            <option [value]="lang.code">{{ lang.display_name }}</option>
+          }
+        </select>
+        <span class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs">▾</span>
+      </div>
 
-      <!-- PrimeNG SelectButton for Mode Toggle -->
-      <p-selectbutton 
-        [options]="modeOptions" 
-        [ngModel]="gameMode()" 
-        (ngModelChange)="modeChange.emit($event)"
-        optionLabel="label" 
-        optionValue="value">
-      </p-selectbutton>
+      <!-- Custom Mode Toggle (Daily / Practice) -->
+      <div class="flex bg-black/40 border border-white/10 rounded-lg p-0.5 gap-0.5">
+        @for (opt of modeOptions; track opt.value) {
+          <button
+          (click)="emitMode(opt.value)"
+            class="text-xs font-bold px-3 py-1.5 rounded-md transition-all cursor-pointer"
+            [class.bg-gradient-to-r]="gameMode() === opt.value"
+            [class.from-amber-500]="gameMode() === opt.value"
+            [class.to-orange-600]="gameMode() === opt.value"
+            [class.text-white]="gameMode() === opt.value"
+            [class.shadow-sm]="gameMode() === opt.value"
+            [class.text-slate-400]="gameMode() !== opt.value"
+            [class.hover:text-slate-200]="gameMode() !== opt.value">
+            {{ opt.label }}
+          </button>
+        }
+      </div>
 
       <!-- Action Buttons -->
       <div class="flex gap-1.5">
-        <p-button 
-          icon="pi pi-question-circle" 
-          [rounded]="true" 
-          [text]="true" 
-          severity="secondary"
-          (onClick)="openHelp.emit()" 
-          title="How to Play" />
-        
-        <p-button 
-          icon="pi pi-chart-bar" 
-          [rounded]="true" 
-          [text]="true" 
-          severity="secondary"
-          (onClick)="openStats.emit()" 
-          title="Statistics" />
+        <button
+          (click)="openHelp.emit()"
+          title="How to Play"
+          class="w-9 h-9 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-transparent hover:border-white/10">
+          <i class="pi pi-question-circle text-base"></i>
+        </button>
+
+        <button
+          (click)="openStats.emit()"
+          title="Statistics"
+          class="w-9 h-9 flex items-center justify-center rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-transparent hover:border-white/10">
+          <i class="pi pi-chart-bar text-base"></i>
+        </button>
       </div>
     </div>
   </div>
