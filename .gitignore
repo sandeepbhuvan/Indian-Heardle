@@ -1,0 +1,171 @@
+# ============================================
+# Indian Heardle – .gitignore
+# Angular (frontend) + Python FastAPI (backend)
+# ============================================
+
+
+# ─── Python / FastAPI (backend) ─────────────────────────────────────────────
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+MANIFEST
+.eggs/
+
+# PyInstaller
+*.spec
+
+# Unit test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+*.lcov
+.tox/
+nosetests.xml
+
+# mypy / pyright / ruff
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.ruff_cache/
+.pyright/
+
+# Environment variable files
+.env
+.env.*
+!.env.example
+
+# SQLite databases (dev data)
+*.db
+*.sqlite3
+*.sqlite
+
+# Alembic auto-generated migration revisions (keep only the versions/ folder itself)
+# Uncomment if you don't want to commit migrations:
+# backend/alembic/versions/*.py
+
+# Logs
+*.log
+logs/
+
+# OS artefacts
+.DS_Store
+Thumbs.db
+
+
+# ─── Angular / Node (frontend) ──────────────────────────────────────────────
+
+# Dependencies
+frontend/node_modules/
+node_modules/
+
+# Angular build output
+frontend/dist/
+frontend/.angular/
+dist/
+.angular/
+
+# Angular cache (speeds up rebuilds – safe to exclude from VCS)
+.angular/cache/
+frontend/.angular/cache/
+
+# Environment override files
+frontend/src/environments/environment.local.ts
+
+# Compiled output (TypeScript)
+frontend/**/*.js.map
+# Uncomment to exclude compiled JS if you only commit TS source:
+# frontend/**/*.js
+# frontend/**/*.d.ts
+
+# System / editor
+.DS_Store
+Thumbs.db
+
+# npm / yarn / pnpm
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/.pnp.cjs
+frontend/.pnp.loader.mjs
+package-lock.json.bak
+
+# Test output
+frontend/coverage/
+frontend/.nyc_output/
+
+# Storybook
+frontend/storybook-static/
+
+
+# ─── Docker ─────────────────────────────────────────────────────────────────
+
+# Ignore local override files (keep the base compose file)
+docker-compose.override.yml
+docker-compose.local.yml
+
+# Docker volumes / data mounts
+data/
+postgres_data/
+
+
+# ─── IDEs & Editors ─────────────────────────────────────────────────────────
+
+# VSCode (keep shared settings if desired; exclude user-specific)
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# JetBrains (PyCharm, WebStorm, etc.)
+.idea/
+*.iml
+
+# Vim / Emacs
+*.swp
+*.swo
+*~
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+
+# ─── Misc ────────────────────────────────────────────────────────────────────
+
+# Secrets / keys — never commit these!
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
+.cache/
+tmp/

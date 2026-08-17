@@ -1,0 +1,85 @@
+<div class="p-5 mb-6 rounded-2xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl relative">
+  <!-- Hidden element for YT Player iframe attachment -->
+  <div id="yt-player-container" class="absolute w-px h-px -left-[9999px] opacity-0 pointer-events-none"></div>
+
+  <!-- Segmented Snippet Timeline -->
+  <div class="mb-5">
+    <div class="flex gap-1 h-7 bg-black/40 rounded-lg p-0.5 border border-white/10 overflow-hidden">
+      @for (seg of snippetLengths(); track $index) {
+        <div 
+          class="rounded flex items-center justify-center relative transition-all duration-300"
+          [class.bg-white/5]="$index > currentAttemptIndex()"
+          [class.bg-amber-500/20]="$index <= currentAttemptIndex()"
+          [class.border]="$index <= currentAttemptIndex()"
+          [class.border-amber-500/40]="$index <= currentAttemptIndex() && $index !== currentAttemptIndex()"
+          [class.border-amber-500]="$index === currentAttemptIndex()"
+          [class.shadow-[0_0_12px_rgba(245,158,11,0.35)]]="$index === currentAttemptIndex()"
+          [style.flex-grow]="getSegmentWeight($index)">
+          <span 
+            class="text-[11px] font-bold tracking-tight font-sans"
+            [class.text-slate-400]="$index > currentAttemptIndex()"
+            [class.text-amber-300]="$index <= currentAttemptIndex()">
+            {{ seg }}s
+          </span>
+        </div>
+      }
+    </div>
+
+    <!-- Dynamic progress bar during playback -->
+    <div class="h-1 bg-white/5 rounded-full mt-1.5 overflow-hidden">
+      <div 
+        class="h-full bg-gradient-to-r from-amber-500 to-pink-500 rounded-full transition-all duration-75" 
+        [style.width.%]="(progress() || 0) * 100">
+      </div>
+    </div>
+  </div>
+
+  <!-- Center Play Button & Time Indicator -->
+  <div class="flex items-center gap-5">
+    <button 
+      (click)="onPlayClick()" 
+      [disabled]="isAudioLoading()"
+      class="w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shrink-0 shadow-lg"
+      [class.bg-gradient-to-br]="!isPlaying()"
+      [class.from-amber-500]="!isPlaying()"
+      [class.to-orange-600]="!isPlaying()"
+      [class.hover:scale-105]="!isPlaying() && !isAudioLoading()"
+      [class.shadow-amber-500/40]="!isPlaying()"
+      [class.bg-gradient-to-br]="isPlaying()"
+      [class.from-pink-500]="isPlaying()"
+      [class.to-rose-600]="isPlaying()"
+      [class.shadow-pink-500/40]="isPlaying()"
+      [class.opacity-60]="isAudioLoading()"
+      [class.cursor-not-allowed]="isAudioLoading()"
+      aria-label="Play snippet">
+      
+      @if (!isPlaying()) {
+        <span class="text-xl ml-0.5 text-white">▶</span>
+      } @else {
+        <div class="flex items-center gap-0.5 h-6">
+          <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.1s]"></div>
+          <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.3s]"></div>
+          <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.2s]"></div>
+          <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.4s]"></div>
+          <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.15s]"></div>
+        </div>
+      }
+    </button>
+
+    <div class="flex-1">
+      <div class="flex items-center gap-2 text-sm text-slate-200 mb-0.5">
+        <span>Snippet Duration:</span>
+        <strong class="text-amber-400 font-bold">{{ currentSnippetLength() }} seconds</strong>
+      </div>
+      @if (!isGameOver()) {
+        <p class="text-xs text-slate-400 leading-snug">
+          Listen closely to guess the song. Unlocks up to 16s with each attempt.
+        </p>
+      } @else {
+        <p class="text-xs text-emerald-400 font-semibold leading-snug">
+          Game Completed! Re-listen to the {{ currentSnippetLength() }}s snippet.
+        </p>
+      }
+    </div>
+  </div>
+</div>

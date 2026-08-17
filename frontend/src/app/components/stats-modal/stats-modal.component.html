@@ -1,0 +1,57 @@
+<p-dialog 
+  [visible]="true" 
+  [modal]="true" 
+  [closable]="true" 
+  (visibleChange)="!$event && onClose()"
+  [draggable]="false" 
+  [resizable]="false"
+  styleClass="w-full max-w-sm"
+  header="📊 Game Statistics">
+  
+  <div class="pt-2">
+    <!-- Metric summaries -->
+    <div class="grid grid-cols-4 gap-2 mb-6">
+      <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
+        <span class="block text-xl font-extrabold text-amber-400">{{ stats().played }}</span>
+        <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Played</span>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
+        <span class="block text-xl font-extrabold text-amber-400">{{ stats().winRate }}%</span>
+        <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Win %</span>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
+        <span class="block text-xl font-extrabold text-amber-400">{{ stats().currentStreak }}</span>
+        <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Streak</span>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-xl p-2.5 text-center">
+        <span class="block text-xl font-extrabold text-amber-400">{{ stats().maxStreak }}</span>
+        <span class="text-[10px] uppercase text-slate-400 font-bold tracking-wider">Max</span>
+      </div>
+    </div>
+
+    <!-- Guess Distribution Graph with PrimeNG ProgressBar -->
+    <h3 class="text-xs text-slate-300 uppercase tracking-wider font-bold mb-3">Guess Distribution</h3>
+    <div class="flex flex-col gap-2 mb-6">
+      @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold text-slate-400 w-3 text-right">{{ item }}</span>
+          <div class="flex-1">
+            <p-progressbar 
+              [value]="getBarWidth(item)" 
+              [showValue]="false"
+              styleClass="h-4" />
+          </div>
+          <span class="text-xs font-bold text-slate-300 w-4 text-right">
+            {{ stats().guessesDistribution[item] || 0 }}
+          </span>
+        </div>
+      }
+    </div>
+
+    <p-button 
+      label="Close" 
+      severity="secondary" 
+      (onClick)="onClose()" 
+      styleClass="w-full text-xs font-semibold py-2.5" />
+  </div>
+</p-dialog>

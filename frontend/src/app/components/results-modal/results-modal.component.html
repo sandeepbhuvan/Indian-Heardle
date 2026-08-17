@@ -1,0 +1,82 @@
+<p-dialog 
+  [visible]="true" 
+  [modal]="true" 
+  [closable]="true" 
+  (visibleChange)="!$event && onClose()"
+  [draggable]="false" 
+  [resizable]="false"
+  styleClass="w-full max-w-md"
+  [header]="isWin() ? '🎉 You Got It!' : '💔 Better Luck Next Time!'">
+  
+  <div class="pt-2">
+    <!-- Song Reveal details -->
+    @if (reveal(); as rev) {
+      <div class="flex gap-4 items-center bg-white/5 p-4 rounded-xl border border-white/10 mb-5">
+        <img 
+          [src]="rev.cover_image_url || 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=300'" 
+          [alt]="rev.title"
+          class="w-20 h-20 rounded-xl object-cover border border-white/10 shrink-0"
+          (error)="onImgError($event)">
+        
+        <div class="flex-1 overflow-hidden">
+          <h2 class="text-lg font-extrabold text-white mb-0.5 truncate">{{ rev.title }}</h2>
+          <p class="text-sm font-semibold text-amber-400 mb-1 truncate">{{ rev.artist }}</p>
+          @if (rev.movie_or_album) {
+            <p class="text-xs text-slate-400">
+              🎬 <span>{{ rev.movie_or_album }}</span>
+              @if (rev.release_year) {
+                <span> ({{ rev.release_year }})</span>
+              }
+            </p>
+          }
+        </div>
+      </div>
+
+      <!-- YouTube Watch Button -->
+      <div class="mb-5">
+        <a 
+          [href]="rev.youtube_url" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          class="flex items-center justify-center gap-2 bg-red-600/15 border border-red-500/35 text-red-300 hover:text-white hover:bg-red-600/25 p-2.5 rounded-xl text-sm font-bold transition-colors">
+          <i class="pi pi-youtube text-lg text-red-500"></i> Watch & Listen on YouTube
+        </a>
+      </div>
+    }
+
+    <!-- Heardle Emoji Grid -->
+    <div class="bg-black/30 p-4 rounded-xl text-center mb-5 border border-white/5">
+      <p class="text-xs text-slate-400 mb-1.5 font-medium">Your Heardle Pattern:</p>
+      <div class="text-xl tracking-widest mb-3">{{ emojiPattern() }}</div>
+      
+      <p-button 
+        [label]="copied() ? 'Copied to Clipboard!' : 'Share Result'"
+        [icon]="copied() ? 'pi pi-check' : 'pi pi-copy'"
+        severity="secondary"
+        (onClick)="copyScore()"
+        styleClass="w-full text-xs font-semibold py-2" />
+    </div>
+
+    <!-- Modal Footer Actions -->
+    <div class="flex flex-col gap-2.5">
+      @if (gameMode() === 'random') {
+        <p-button 
+          label="Play Another Random Song" 
+          icon="pi pi-refresh"
+          severity="warn"
+          (onClick)="playAgain.emit()" 
+          styleClass="w-full py-3 font-bold text-sm shadow-lg shadow-amber-500/25" />
+      } @else {
+        <div class="text-center text-xs text-slate-400 flex flex-col gap-2">
+          <p>New daily song drops at midnight!</p>
+          <p-button 
+            label="Practice Mode (Unlimited Songs)" 
+            icon="pi pi-bolt"
+            severity="warn"
+            (onClick)="playPractice.emit()" 
+            styleClass="w-full py-3 font-bold text-sm shadow-lg shadow-amber-500/25" />
+        </div>
+      }
+    </div>
+  </div>
+</p-dialog>

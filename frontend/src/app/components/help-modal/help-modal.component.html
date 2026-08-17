@@ -1,0 +1,51 @@
+<p-dialog 
+  [visible]="true" 
+  [modal]="true" 
+  [closable]="true" 
+  (visibleChange)="!$event && onClose()"
+  [draggable]="false" 
+  [resizable]="false"
+  styleClass="w-full max-w-sm"
+  header="📖 How to Play">
+  
+  <div class="pt-2 space-y-3 mb-6">
+    <p class="text-sm text-slate-300 leading-relaxed">
+      Guess the Indian song in <strong class="text-white">6 attempts</strong>! Each attempt unlocks more of the snippet.
+    </p>
+
+    <div class="flex gap-3 items-start text-xs text-slate-400 leading-relaxed">
+      <span class="text-base shrink-0">1️⃣</span>
+      <div>
+        <strong class="text-slate-200 font-semibold">Listen to the snippet:</strong> Click Play to hear the initial 1-second hook.
+      </div>
+    </div>
+
+    <div class="flex gap-3 items-start text-xs text-slate-400 leading-relaxed">
+      <span class="text-base shrink-0">2️⃣</span>
+      <div>
+        <strong class="text-slate-200 font-semibold">Submit your guess:</strong> Search by song title, artist, or movie in the autocomplete search box.
+      </div>
+    </div>
+
+    <div class="flex gap-3 items-start text-xs text-slate-400 leading-relaxed">
+      <span class="text-base shrink-0">3️⃣</span>
+      <div>
+        <strong class="text-slate-200 font-semibold">Or Skip:</strong> Skipped or incorrect tries unlock more seconds (1s → 2s → 4s → 7s → 11s → 16s).
+      </div>
+    </div>
+
+    <div class="flex gap-3 items-start text-xs text-slate-400 leading-relaxed">
+      <span class="text-base shrink-0">4️⃣</span>
+      <div>
+        <strong class="text-slate-200 font-semibold">Multi-Language:</strong> Switch between Bollywood (Hindi), Tamil, Telugu, Punjabi, Malayalam, or Kannada from the top bar!
+      </div>
+    </div>
+  </div>
+
+  <p-button 
+    label="Let's Play!" 
+    icon="pi pi-play"
+    severity="warn"
+    (onClick)="onClose()" 
+    styleClass="w-full py-3 font-bold text-sm shadow-lg shadow-amber-500/25" />
+</p-dialog>

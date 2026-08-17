@@ -1,0 +1,171 @@
+/* === Indian Heardle Modern CSS & PrimeNG Styling === */
+@import "primeicons/primeicons.css";
+
+/* Google Fonts are loaded in index.html */
+:root {
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  
+  --bg-main: #090d16;
+  --bg-card: rgba(15, 23, 42, 0.85);
+  --border-subtle: rgba(255, 255, 255, 0.1);
+  --border-focus: rgba(245, 158, 11, 0.5);
+  --accent-amber: #f59e0b;
+  --accent-pink: #ec4899;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-main);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.14) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.12) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(6, 182, 212, 0.08) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: #f8fafc;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+/* Soundwave Animation */
+@keyframes soundwave {
+  0%, 100% { height: 4px; }
+  50% { height: 24px; }
+}
+
+.animate-soundwave {
+  animation: soundwave 1s infinite ease-in-out;
+}
+
+/* PrimeNG Theme Dark Overrides */
+.p-select, .p-dropdown {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0.75rem !important;
+  color: #f8fafc !important;
+}
+.p-select:hover, .p-select:focus-within {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2) !important;
+}
+.p-select-label {
+  color: #f8fafc !important;
+  font-size: 0.85rem !important;
+  padding: 0.45rem 0.75rem !important;
+}
+.p-select-dropdown {
+  color: #94a3b8 !important;
+}
+.p-select-overlay, .p-dropdown-panel {
+  background: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  backdrop-filter: blur(16px);
+  border-radius: 0.75rem !important;
+}
+.p-select-option {
+  color: #e2e8f0 !important;
+  padding: 0.5rem 0.75rem !important;
+}
+.p-select-option:hover, .p-select-option.p-focus {
+  background: rgba(245, 158, 11, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.p-selectbutton {
+  background: rgba(0, 0, 0, 0.4) !important;
+  padding: 2px !important;
+  border-radius: 0.5rem !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+.p-selectbutton .p-togglebutton {
+  background: transparent !important;
+  border: none !important;
+  color: #94a3b8 !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  padding: 0.35rem 0.65rem !important;
+  border-radius: 0.375rem !important;
+}
+.p-selectbutton .p-togglebutton.p-togglebutton-checked {
+  background: linear-gradient(135deg, #f59e0b, #ea580c) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35) !important;
+}
+
+.p-autocomplete {
+  width: 100% !important;
+}
+.p-autocomplete-input {
+  width: 100% !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: #f8fafc !important;
+  border-radius: 0.75rem !important;
+  padding: 0.65rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+.p-autocomplete-input:focus {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2) !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+}
+.p-autocomplete-overlay {
+  background: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  backdrop-filter: blur(16px);
+  border-radius: 0.75rem !important;
+  margin-top: 4px !important;
+}
+.p-autocomplete-option {
+  color: #f8fafc !important;
+  padding: 0.6rem 1rem !important;
+}
+.p-autocomplete-option:hover, .p-autocomplete-option.p-focus {
+  background: rgba(245, 158, 11, 0.15) !important;
+}
+
+.p-dialog {
+  background: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(20px);
+  border-radius: 1.25rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8) !important;
+}
+.p-dialog-header {
+  background: transparent !important;
+  color: #ffffff !important;
+  padding: 1.25rem 1.5rem 0.75rem !important;
+  font-weight: 800 !important;
+}
+.p-dialog-content {
+  background: transparent !important;
+  color: #cbd5e1 !important;
+  padding: 0 1.5rem 1.5rem !important;
+}
+.p-dialog-close-button {
+  color: #94a3b8 !important;
+}
+.p-dialog-close-button:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+.p-progressbar {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-radius: 4px !important;
+  height: 18px !important;
+}
+.p-progressbar-value {
+  background: linear-gradient(90deg, #f59e0b, #ec4899) !important;
+  border-radius: 4px !important;
+}

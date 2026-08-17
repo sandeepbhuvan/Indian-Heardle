@@ -1,0 +1,54 @@
+<div class="flex flex-col gap-2 mb-5">
+  @for (slot of slots(); track slot) {
+    <div 
+      class="flex items-center gap-3 px-4 py-2.5 rounded-xl border min-h-[48px] transition-all duration-200"
+      [class.bg-slate-950/40]="!attempts()[slot]"
+      [class.border-white/5]="!attempts()[slot]"
+      [class.border-amber-500/40]="slot === currentAttemptIndex() && !isGameOver()"
+      [class.bg-amber-500/5]="slot === currentAttemptIndex() && !isGameOver()"
+      [class.border-emerald-500/40]="attempts()[slot]?.isCorrect"
+      [class.bg-emerald-500/10]="attempts()[slot]?.isCorrect"
+      [class.border-amber-500/40]="attempts()[slot]?.status === 'close'"
+      [class.bg-amber-500/10]="attempts()[slot]?.status === 'close'"
+      [class.border-rose-500/40]="attempts()[slot] && !attempts()[slot].isCorrect && !attempts()[slot].isSkipped && attempts()[slot].status !== 'close'"
+      [class.bg-rose-500/10]="attempts()[slot] && !attempts()[slot].isCorrect && !attempts()[slot].isSkipped && attempts()[slot].status !== 'close'"
+      [class.border-white/10]="attempts()[slot]?.isSkipped"
+      [class.bg-white/5]="attempts()[slot]?.isSkipped">
+      
+      <!-- Slot Status Icon -->
+      <div class="w-6 flex items-center justify-center text-sm">
+        @if (attempts()[slot]?.isCorrect) {
+          <span>🟩</span>
+        } @else if (attempts()[slot]?.status === 'close') {
+          <span>🟨</span>
+        } @else if (attempts()[slot]?.isSkipped) {
+          <span>⬛</span>
+        } @else if (attempts()[slot]) {
+          <span>🟥</span>
+        } @else {
+          <span class="text-xs font-bold text-slate-500">{{ slot + 1 }}</span>
+        }
+      </div>
+
+      <!-- Text details -->
+      <div class="flex-1 text-sm font-semibold text-slate-100 truncate">
+        @if (attempts()[slot]?.isSkipped) {
+          <span class="text-slate-400 text-xs font-bold tracking-wider">SKIPPED</span>
+        } @else if (attempts()[slot]) {
+          <span>{{ attempts()[slot].guessText }}</span>
+        } @else {
+          <span class="text-slate-600 font-medium text-xs">
+            {{ slot === currentAttemptIndex() && !isGameOver() ? 'Listening...' : '' }}
+          </span>
+        }
+      </div>
+
+      <!-- Feedback hint badge -->
+      @if (attempts()[slot]?.feedback) {
+        <div class="text-xs text-slate-400 max-w-[200px] truncate">
+          {{ attempts()[slot].feedback }}
+        </div>
+      }
+    </div>
+  }
+</div>
