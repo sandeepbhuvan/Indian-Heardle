@@ -74,8 +74,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
   readonly nextSnippetDuration = computed(() => {
     const ch = this.challenge();
+    if (!ch?.snippet_lengths || ch.snippet_lengths.length === 0) return 1;
+    
     const currentCount = this.attempts().length;
-    if (!ch) return 1;
     const nextIdx = Math.min(currentCount + 1, ch.snippet_lengths.length - 1);
     const currIdx = Math.min(currentCount, ch.snippet_lengths.length - 1);
     return (ch.snippet_lengths[nextIdx] || 16) - (ch.snippet_lengths[currIdx] || 1);
@@ -110,6 +111,11 @@ export class GameBoardComponent implements OnInit, OnDestroy {
           { code: 'kn', display_name: 'Kannada', native_name: 'ಕನ್ನಡ' }
         ];
         this.languages.set(fallback);
+        
+        // Ensure language is selected for fallback as well
+        if (fallback.length > 0 && !this.selectedLanguage()) {
+          this.selectedLanguage.set(fallback[0].code);
+        }
         this.loadGameChallenge();
       }
     });
@@ -137,6 +143,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
         this.setupYouTubePlayer(res.youtube_video_id, res.snippet_start_seconds);
       },
       error: (err) => {
+        console.error('Could not load song challenge', err);
         this.isLoading.set(false);
         this.errorMessage.set('Could not load song challenge. Please make sure the backend is running.');
       }
@@ -145,16 +152,22 @@ export class GameBoardComponent implements OnInit, OnDestroy {
 
   setupYouTubePlayer(videoId: string, startSeconds: number) {
     this.isAudioLoading.set(true);
-    setTimeout(() => {
-      this.ytService.createPlayer('yt-player-container', videoId, startSeconds).then(() => {
+    // Directly setup the player since the container is at the root level and always present in the DOM
+    this.ytService.createPlayer('yt-player-container', videoId, startSeconds)
+      .then(() => {
         this.isAudioLoading.set(false);
+      })
+      .catch((err) => {
+        console.error('Error creating YT player', err);
+        this.isAudioLoading.set(false);
+        this.errorMessage.set('Failed to initialize the audio player.');
       });
-    }, 50);
   }
 
   handlePlaySnippet() {
     const ch = this.challenge();
-    if (!ch) return;
+    if (!ch?.snippet_lengths || ch.snippet_lengths.length === 0) return;
+    
     const currentCount = this.attempts().length;
     const snippetSecs = ch.snippet_lengths[Math.min(currentCount, ch.snippet_lengths.length - 1)] || 16;
     this.ytService.playSnippet(ch.snippet_start_seconds, snippetSecs);
@@ -197,6 +210,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     const ch = this.challenge();
     if (!ch || this.isGameOver()) return;
 
+    this.errorMessage.set('');
+
     const attemptNumber = this.attempts().length + 1;
     const isRandom = this.gameMode() === 'random';
 
@@ -227,6 +242,7 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Error submitting guess', err);
+        this.errorMessage.set('Failed to submit guess. Please try again.');
       }
     });
   }
@@ -251,6 +267,10 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       next: (reveal) => {
         this.revealData.set(reveal);
         this.showResultsModal.set(true);
+      },
+      error: (err) => {
+        console.error('Error revealing song details', err);
+        this.errorMessage.set('Failed to load song results.');
       }
     });
   }
@@ -261,7 +281,9 @@ export class GameBoardComponent implements OnInit, OnDestroy {
       if (saved) {
         this.stats.set(JSON.parse(saved));
       }
-    } catch (e) {}
+    } catch (e) {
+      console.warn('Could not parse local stats', e);
+    }
   }
 
   updateStats(win: boolean, attemptsCount: number) {
@@ -285,6 +307,8 @@ export class GameBoardComponent implements OnInit, OnDestroy {
     this.stats.set(curr);
     try {
       localStorage.setItem('heardle_stats', JSON.stringify(curr));
-    } catch (e) {}
+    } catch (e) {
+      console.error('Could not save local stats', e);
+    }
   }
 }

@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-2 mb-5">
   @for (slot of slots(); track slot) {
     <div 
-      class="flex items-center gap-3 px-4 py-2.5 rounded-xl border min-h-[48px] transition-all duration-200"
+      class="flex items-center gap-3 px-4 py-2.5 rounded-xl border min-h-12 transition-all duration-200"
       [class.bg-slate-950/40]="!attempts()[slot]"
       [class.border-white/5]="!attempts()[slot]"
       [class.border-amber-500/40]="slot === currentAttemptIndex() && !isGameOver()"
@@ -45,7 +45,7 @@
 
       <!-- Feedback hint badge -->
       @if (attempts()[slot]?.feedback) {
-        <div class="text-xs text-slate-400 max-w-[200px] truncate">
+        <div class="text-xs text-slate-400 max-w-50 truncate">
           {{ attempts()[slot].feedback }}
         </div>
       }

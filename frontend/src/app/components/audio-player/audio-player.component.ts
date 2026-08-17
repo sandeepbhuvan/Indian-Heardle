@@ -27,10 +27,14 @@ export class AudioPlayerComponent {
     return lengths[idx] || 16;
   });
 
-  getSegmentWeight(index: number): number {
-    const diffs = [1, 1, 2, 3, 4, 5];
-    return diffs[index] || 2;
-  }
+  // Computed signal for dynamic timeline segments
+  readonly segments = computed(() => {
+    const lengths = this.snippetLengths();
+    return lengths.map((length, index) => {
+      const weight = index === 0 ? length : length - lengths[index - 1];
+      return { length, weight };
+    });
+  });
 
   onPlayClick() {
     this.playToggle.emit();

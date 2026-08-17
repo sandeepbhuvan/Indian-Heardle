@@ -1,25 +1,22 @@
 <div class="p-5 mb-6 rounded-2xl bg-slate-900/60 backdrop-blur-xl border border-white/10 shadow-2xl relative">
   <!-- Hidden element for YT Player iframe attachment -->
-  <div id="yt-player-container" class="absolute w-px h-px -left-[9999px] opacity-0 pointer-events-none"></div>
+  <div id="yt-player-container" class="absolute w-px h-px left-[-9999px] opacity-0 pointer-events-none"></div>
 
   <!-- Segmented Snippet Timeline -->
   <div class="mb-5">
     <div class="flex gap-1 h-7 bg-black/40 rounded-lg p-0.5 border border-white/10 overflow-hidden">
-      @for (seg of snippetLengths(); track $index) {
+      @for (seg of segments(); track $index) {
         <div 
           class="rounded flex items-center justify-center relative transition-all duration-300"
-          [class.bg-white/5]="$index > currentAttemptIndex()"
-          [class.bg-amber-500/20]="$index <= currentAttemptIndex()"
-          [class.border]="$index <= currentAttemptIndex()"
-          [class.border-amber-500/40]="$index <= currentAttemptIndex() && $index !== currentAttemptIndex()"
-          [class.border-amber-500]="$index === currentAttemptIndex()"
-          [class.shadow-[0_0_12px_rgba(245,158,11,0.35)]]="$index === currentAttemptIndex()"
-          [style.flex-grow]="getSegmentWeight($index)">
-          <span 
-            class="text-[11px] font-bold tracking-tight font-sans"
-            [class.text-slate-400]="$index > currentAttemptIndex()"
-            [class.text-amber-300]="$index <= currentAttemptIndex()">
-            {{ seg }}s
+          [ngClass]="{
+            'bg-white/5 text-slate-400': $index > currentAttemptIndex(),
+            'bg-amber-500/20 border text-amber-300': $index <= currentAttemptIndex(),
+            'border-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.35)]': $index === currentAttemptIndex(),
+            'border-amber-500/40': $index < currentAttemptIndex()
+          }"
+          [style.flex-grow]="seg.weight">
+          <span class="text-[11px] font-bold tracking-tight font-sans">
+            {{ seg.length }}s
           </span>
         </div>
       }
@@ -28,7 +25,7 @@
     <!-- Dynamic progress bar during playback -->
     <div class="h-1 bg-white/5 rounded-full mt-1.5 overflow-hidden">
       <div 
-        class="h-full bg-gradient-to-r from-amber-500 to-pink-500 rounded-full transition-all duration-75" 
+        class="h-full bg-linear-to-r from-amber-500 to-pink-500 rounded-full transition-all duration-75" 
         [style.width.%]="(progress() || 0) * 100">
       </div>
     </div>
@@ -39,24 +36,18 @@
     <button 
       (click)="onPlayClick()" 
       [disabled]="isAudioLoading()"
-      class="w-14 h-14 rounded-full flex items-center justify-center cursor-pointer transition-all duration-200 shrink-0 shadow-lg"
-      [class.bg-gradient-to-br]="!isPlaying()"
-      [class.from-amber-500]="!isPlaying()"
-      [class.to-orange-600]="!isPlaying()"
-      [class.hover:scale-105]="!isPlaying() && !isAudioLoading()"
-      [class.shadow-amber-500/40]="!isPlaying()"
-      [class.bg-gradient-to-br]="isPlaying()"
-      [class.from-pink-500]="isPlaying()"
-      [class.to-rose-600]="isPlaying()"
-      [class.shadow-pink-500/40]="isPlaying()"
-      [class.opacity-60]="isAudioLoading()"
-      [class.cursor-not-allowed]="isAudioLoading()"
-      aria-label="Play snippet">
+      class="bg-linear-to-br px-5 h-14 rounded-full flex items-center gap-3 transition-all duration-200 shrink-0 shadow-lg"
+      [ngClass]="{
+        'from-amber-500 to-orange-600 shadow-amber-500/40': !isPlaying(),
+        'from-pink-500 to-rose-600 shadow-pink-500/40': isPlaying(),
+        'hover:scale-105 cursor-pointer': !isPlaying() && !isAudioLoading(),
+        'opacity-60 cursor-not-allowed': isAudioLoading()
+      }">
       
       @if (!isPlaying()) {
-        <span class="text-xl ml-0.5 text-white">▶</span>
+        <span class="text-xl text-white" aria-hidden="true">▶</span>
       } @else {
-        <div class="flex items-center gap-0.5 h-6">
+        <div class="flex items-center gap-0.5 h-6" aria-hidden="true">
           <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.1s]"></div>
           <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.3s]"></div>
           <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.2s]"></div>
@@ -64,6 +55,8 @@
           <div class="w-0.5 bg-white rounded-full animate-soundwave [animation-delay:0.15s]"></div>
         </div>
       }
+      <!-- Visible text label matching the accessible name to satisfy SonarQube S7927 -->
+      <span class="text-white font-semibold text-sm tracking-wide">Play snippet</span>
     </button>
 
     <div class="flex-1">
